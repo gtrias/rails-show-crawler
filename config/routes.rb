@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :shows
 
+  get '/shows/:id/crawl', to: 'shows#crawl'
+
   root :to => 'shows#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

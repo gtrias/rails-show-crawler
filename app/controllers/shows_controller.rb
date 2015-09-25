@@ -1,5 +1,5 @@
 class ShowsController < ApplicationController
-  before_action :set_show, only: [:show, :edit, :update, :destroy]
+  before_action :set_show, only: [:show, :edit, :update, :destroy, :crawl]
 
   # GET /shows
   # GET /shows.json
@@ -15,6 +15,14 @@ class ShowsController < ApplicationController
   # GET /crawl/1
   # GET /crawl/1.json
   def crawl
+    require 'nokogiri'
+    require 'open-uri'
+
+    doc = Nokogiri::HTML(open("http://www.mejortorrent.com/secciones.php?sec=buscador&valor=" + @show.name))
+    doc.css('a').each do |link|
+        Rails.logger.debug("Show: #{link.inspect}")
+    end
+
   end
 
   # GET /shows/new
