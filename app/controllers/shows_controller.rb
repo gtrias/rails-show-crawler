@@ -18,9 +18,22 @@ class ShowsController < ApplicationController
     require 'nokogiri'
     require 'open-uri'
 
-    doc = Nokogiri::HTML(open("http://www.mejortorrent.com/secciones.php?sec=buscador&valor=" + @show.name))
+    url_base = "http://www.mejortorrent.com"
+
+    doc = Nokogiri::HTML(open(url_base + "/secciones.php?sec=buscador&valor=" + @show.name))
     doc.css('a').each do |link|
-        Rails.logger.debug("Show: #{link.inspect}")
+        # Rails.logger.debug("Show: #{link.inspect}")
+        # Rails.logger.debug("Show text: #{link['text']}")
+
+        if link['href'].match(/(\d)-Temporada/)
+            season = match.captures
+            # Rails.logger.debug("Show href: #{link['href']}")
+            torrentsdoc = Nokogiri::HTML(open(url_base + link['href']))
+            torrentsdoc.css('a').each do |tlink|
+                # Rails.logger.debug("Show href: #{tlink['href']}")
+                Rails.logger.debug("Show season href: #{season}")
+            end
+        end
     end
 
   end
