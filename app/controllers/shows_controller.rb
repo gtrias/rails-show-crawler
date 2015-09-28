@@ -25,13 +25,16 @@ class ShowsController < ApplicationController
         # Rails.logger.debug("Show: #{link.inspect}")
         # Rails.logger.debug("Show text: #{link['text']}")
 
-        if link['href'].match(/(\d)-Temporada/)
-            season = match.captures
+        if /(\d)-Temporada/.match(link['href'])
             # Rails.logger.debug("Show href: #{link['href']}")
             torrentsdoc = Nokogiri::HTML(open(url_base + link['href']))
+            # season = $1
             torrentsdoc.css('a').each do |tlink|
-                # Rails.logger.debug("Show href: #{tlink['href']}")
-                Rails.logger.debug("Show season href: #{season}")
+                Rails.logger.debug("Show href: #{tlink['href']}")
+                # Rails.logger.debug("Show season: #{$1}")
+                # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
+                if /{$1}x[0-9]{2}/.match(link['href'])
+                end
             end
         end
     end
