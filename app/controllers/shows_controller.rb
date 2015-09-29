@@ -17,7 +17,6 @@ class ShowsController < ApplicationController
   def crawl
     require 'nokogiri'
     require 'open-uri'
-    require 'transmission'
 
     url_base = "http://www.mejortorrent.com"
 
@@ -45,9 +44,8 @@ class ShowsController < ApplicationController
                             episodetorrentpage.css('a').each do |stplink|
                                 if /\.torrent$/.match(stplink['href'])
                                     Rails.logger.debug("matched show: #{stplink['href']}")
-                                    rpc = Transmission::Config.set host: 'localhost', port: 9091, ssl: false, credentials: {username: 'transmission', password: 'transmission'}
                                     url = url_base + stplink['href']
-                                    Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
+                                    add_torrent(url)
                                 end
                             end
                         end
@@ -116,5 +114,15 @@ class ShowsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def show_params
       params.require(:show).permit(:name, :description, :active)
+    end
+
+    def add_torrent(url)
+      require 'transmission'
+      begin
+        rpc = Transmission::Config.set host: 'localhost', port: 9091, ssl: false, credentials: {username: 'transmission', password: 'transmission'}
+        Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
+      rescue => ex
+        logger.error ex.message
+      end
     end
 end
