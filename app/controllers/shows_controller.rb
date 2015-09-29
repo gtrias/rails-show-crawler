@@ -34,8 +34,8 @@ class ShowsController < ApplicationController
                 # Rails.logger.debug("Show season: #{$1}")
                 # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
                 if /([0-9])x([0-9]{2})/.match(tlink['href'])
-                    # season = $1
-                    # episode = $2
+                    season = $1
+                    episode = $2
                     # Rails.logger.debug("matched show link: #{tlink['href']}")
                     episodepage = Nokogiri::HTML(open(url_base + tlink['href']))
                     episodepage.css('a').each do |stlink|
@@ -45,7 +45,7 @@ class ShowsController < ApplicationController
                                 if /\.torrent$/.match(stplink['href'])
                                     Rails.logger.debug("matched show: #{stplink['href']}")
                                     url = url_base + stplink['href']
-                                    add_torrent(url)
+                                    add_torrent(url, show, season, episode)
                                 end
                             end
                         end
@@ -116,11 +116,19 @@ class ShowsController < ApplicationController
       params.require(:show).permit(:name, :description, :active)
     end
 
-    def add_torrent(url)
+    def add_torrent(url, show, season, episode)
       require 'transmission'
+      path_base = '/media/downloads/Series'
+
       begin
         rpc = Transmission::Config.set host: 'localhost', port: 9091, ssl: false, credentials: {username: 'transmission', password: 'transmission'}
-        Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
+        torrent = Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
+        torrent.stop!
+        location = path_base + "/" + @show.name + "/" + season + "/"
+        torrent.set_location location , true
+        Rails.logger.debug("--------> Location: #{location}")
+        torrent.save!
+
       rescue => ex
         logger.error ex.message
       end
