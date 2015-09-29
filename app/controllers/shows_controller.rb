@@ -17,6 +17,7 @@ class ShowsController < ApplicationController
   def crawl
     require 'nokogiri'
     require 'open-uri'
+    require 'transmission'
 
     url_base = "http://www.mejortorrent.com"
 
@@ -30,15 +31,31 @@ class ShowsController < ApplicationController
             torrentsdoc = Nokogiri::HTML(open(url_base + link['href']))
             # season = $1
             torrentsdoc.css('a').each do |tlink|
-                Rails.logger.debug("Show href: #{tlink['href']}")
+                # Rails.logger.debug("Show href: #{tlink['href']}")
                 # Rails.logger.debug("Show season: #{$1}")
                 # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
-                if /{$1}x[0-9]{2}/.match(link['href'])
+                if /([0-9])x([0-9]{2})/.match(tlink['href'])
+                    # season = $1
+                    # episode = $2
+                    # Rails.logger.debug("matched show link: #{tlink['href']}")
+                    episodepage = Nokogiri::HTML(open(url_base + tlink['href']))
+                    episodepage.css('a').each do |stlink|
+                        if /secciones\.php\?sec=descargas&ap=contar&tabla=series/.match(stlink['href'])
+                            episodetorrentpage = Nokogiri::HTML(open(url_base + '/' + stlink['href']))
+                            episodetorrentpage.css('a').each do |stplink|
+                                if /\.torrent$/.match(stplink['href'])
+                                    Rails.logger.debug("matched show: #{stplink['href']}")
+                                    rpc = Transmission::Config.set host: 'localhost', port: 9091, ssl: false, credentials: {username: 'transmission', password: 'transmission'}
+                                    url = url_base + stplink['href']
+                                    Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
+                                end
+                            end
+                        end
+                    end
                 end
             end
         end
     end
-
   end
 
   # GET /shows/new
