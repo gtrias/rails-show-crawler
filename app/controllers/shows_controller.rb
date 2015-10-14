@@ -35,19 +35,23 @@ class ShowsController < ApplicationController
                 # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
                 if /([0-9])x([0-9]{2})/.match(tlink['href'])
                     season = $1
-                    season_control(@show, season)
+                    @season = season_control(@show, season)
                     episode = $2
-                    # Check here if we have this chapter or not
-                    # Rails.logger.debug("matched show link: #{tlink['href']}")
-                    episodepage = Nokogiri::HTML(open(url_base + tlink['href']))
-                    episodepage.css('a').each do |stlink|
-                        if /secciones\.php\?sec=descargas&ap=contar&tabla=series/.match(stlink['href'])
-                            episodetorrentpage = Nokogiri::HTML(open(url_base + '/' + stlink['href']))
-                            episodetorrentpage.css('a').each do |stplink|
-                                if /\.torrent$/.match(stplink['href'])
-                                    Rails.logger.debug("matched show: #{stplink['href']}")
-                                    url = url_base + stplink['href']
-                                    add_torrent(url, show, season, episode)
+
+                    unless Chapter.where(number: chapter_number, season_id: season).first
+                        chapter_control(@show, season, episode)
+                        # Check here if we have this chapter or not
+                        # Rails.logger.debug("matched show link: #{tlink['href']}")
+                        episodepage = Nokogiri::HTML(open(url_base + tlink['href']))
+                        episodepage.css('a').each do |stlink|
+                            if /secciones\.php\?sec=descargas&ap=contar&tabla=series/.match(stlink['href'])
+                                episodetorrentpage = Nokogiri::HTML(open(url_base + '/' + stlink['href']))
+                                episodetorrentpage.css('a').each do |stplink|
+                                    if /\.torrent$/.match(stplink['href'])
+                                        Rails.logger.debug("matched show: #{stplink['href']}")
+                                        url = url_base + stplink['href']
+                                        add_torrent(url, show, season, episode)
+                                    end
                                 end
                             end
                         end
@@ -118,11 +122,23 @@ class ShowsController < ApplicationController
       params.require(:show).permit(:name, :description, :active)
     end
 
-    # Creates the season it it doesn't exists yet
+    # Creates the season if it doesn't exists yet
     def season_control(show, season_number)
-        unless Season.exists?(number: season_number, show_id: @show.id)
+        @season = Season.where(number: season_number, show_id: @show.id).first
+        unless @season
             @season = Season.new(number: season_number, show_id: @show.id)
             @season.save
+        end
+
+        return @season
+    end
+
+    # Creates the chapter if it doesn't exists yet
+    def chapter_control(show, season_number, chapter_number)
+        @season = Season.where(number: season_number, show_id: @show.id).first
+        unless Chapter.exists?(number: chapter_number, season_id: @season.id)
+            @chapter = Chapter.new(number: chapter_number, season_id: @season.id)
+            @chapter.save
         end
     end
 

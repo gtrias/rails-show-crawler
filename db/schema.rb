@@ -11,7 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151014065143) do
+ActiveRecord::Schema.define(version: 20151014072130) do
+
+  create_table "chapters", force: :cascade do |t|
+    t.integer  "number"
+    t.integer  "season_id"
+    t.string   "quality"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "chapters", ["season_id"], name: "index_chapters_on_season_id"
 
   create_table "seasons", force: :cascade do |t|
     t.integer  "number"
