@@ -118,6 +118,7 @@ class ShowsController < ApplicationController
       params.require(:show).permit(:name, :description, :active)
     end
 
+    # Creates the season it it doesn't exists yet
     def season_control(show, season_number)
         unless Season.exists?(number: season_number, show_id: @show.id)
             @season = Season.new(number: season_number, show_id: @show.id)
@@ -125,6 +126,7 @@ class ShowsController < ApplicationController
         end
     end
 
+    # Adds the torrent to transmission
     def add_torrent(url, show, season, episode)
       require 'transmission'
       path_base = '/media/downloads/Series'
