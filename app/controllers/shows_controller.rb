@@ -119,8 +119,10 @@ class ShowsController < ApplicationController
     end
 
     def season_control(show, season_number)
-        @season = Season.new(number: season_number, show_id: @show.id)
-        @season.save
+        unless Season.exists?(number: season_number, show_id: @show.id)
+            @season = Season.new(number: season_number, show_id: @show.id)
+            @season.save
+        end
     end
 
     def add_torrent(url, show, season, episode)
