@@ -35,7 +35,9 @@ class ShowsController < ApplicationController
                 # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
                 if /([0-9])x([0-9]{2})/.match(tlink['href'])
                     season = $1
+                    season_control(@show, season)
                     episode = $2
+                    # Check here if we have this chapter or not
                     # Rails.logger.debug("matched show link: #{tlink['href']}")
                     episodepage = Nokogiri::HTML(open(url_base + tlink['href']))
                     episodepage.css('a').each do |stlink|
@@ -114,6 +116,11 @@ class ShowsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def show_params
       params.require(:show).permit(:name, :description, :active)
+    end
+
+    def season_control(show, season_number)
+        @season = Season.new(number: season_number, show_id: @show.id)
+        @season.save
     end
 
     def add_torrent(url, show, season, episode)
