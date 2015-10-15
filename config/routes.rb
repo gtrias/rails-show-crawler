@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :qualities
   resources :shows
 
   get '/shows/:id/crawl', to: 'shows#crawl', as: 'crawl_show'
