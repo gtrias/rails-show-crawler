@@ -36,6 +36,13 @@
     </div>
     <%= error_span(@show[:active]) %>
   </div>
+  <div class="control-group">
+    <%= f.label :quality_ids, :class => 'control-label' %>
+    <div class="controls">
+        <%= f.collection_select :quality_ids, Quality.order(:order), :id, :name, {}, {multiple: true} %>
+    </div>
+    <%= error_span(@show[:quality_ids]) %>
+  </div>
 
 
   <%= f.submit nil, :class => 'btn btn-primary' %>
