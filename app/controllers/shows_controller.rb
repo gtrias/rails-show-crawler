@@ -145,10 +145,10 @@ class ShowsController < ApplicationController
     # Adds the torrent to transmission
     def add_torrent(url, show, season, episode)
       require 'transmission'
-      path_base = '/media/datos/Series'
+      path_base = Settings.shows_download_folder
 
       begin
-        rpc = Transmission::Config.set host: 'localhost', port: 9091, ssl: false, credentials: {username: 'transmission', password: 'transmission'}
+        rpc = Transmission::Config.set host: Settings.transmission.host, port: Settings.transmission.port, ssl: false, credentials: {username: Settings.transmission.user, password: Settings.transmission.password}
         torrent = Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
         torrent.stop!
         location = path_base + "/" + @show.name + "/" + season + "/"

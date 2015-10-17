@@ -48,3 +48,4 @@ end
 gem "twitter-bootstrap-rails"
 gem "nokogiri"
 gem "transmission-rpc-ruby"
+gem "config"

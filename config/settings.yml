@@ -1,0 +1,7 @@
+transmission:
+    host: localhost
+    port: 9091
+    user: transmission
+    password: transmission
+
+shows_download_folder: /media/datos/Series
