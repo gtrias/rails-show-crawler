@@ -38,7 +38,7 @@ class ShowsController < ApplicationController
                     @season = season_control(@show, season)
                     episode = $2
 
-                    unless Chapter.where(number: chapter_number, season_id: season).first
+                    unless Chapter.where(number: episode, season_id: season).first
                         chapter_control(@show, season, episode)
                         # Check here if we have this chapter or not
                         # Rails.logger.debug("matched show link: #{tlink['href']}")
