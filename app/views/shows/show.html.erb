@@ -10,11 +10,22 @@
   <dd><%= @show.description %></dd>
   <dt><strong><%= model_class.human_attribute_name(:active) %>:</strong></dt>
   <dd><%= @show.active %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:seasons) %>:</strong></dt>
+  <dt><strong>
+      <%= model_class.human_attribute_name(:seasons) %>
+      and
+      <%= model_class.human_attribute_name(:chapters) %>:
+  </strong></dt>
   <dd>
       <ul>
           <% @show.seasons.each do |season| %>
-              <li><%= season.number %></li>
+              <li>
+                  <%= season.number %>
+                  <ul>
+                      <% season.chapter do |chapter| %>
+                          <%= chapter.number %>
+                      <% end %>
+                  </ul>
+              </li>
           <% end %>
       </ul>
   </dd>
