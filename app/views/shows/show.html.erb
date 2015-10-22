@@ -21,8 +21,8 @@
               <li>
                   <%= season.number %>
                   <ul>
-                      <% season.chapter do |chapter| %>
-                          <%= chapter.number %>
+                      <% season.chapters do |chapter| %>
+                          <li><%= chapter.number %></li>
                       <% end %>
                   </ul>
               </li>
