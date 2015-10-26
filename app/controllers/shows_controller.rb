@@ -139,8 +139,8 @@ class ShowsController < ApplicationController
                   # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
                   if /([0-9])x([0-9]{2})/.match(tlink['href'])
                       season = $1
-                      @season = season_control(@show, season)
                       episode = $2
+                      @season = season_control(@show, season)
 
 
                       # Check here if we have this chapter or not
@@ -153,6 +153,7 @@ class ShowsController < ApplicationController
                             if /\.torrent$/.match(stplink['href'])
                               Rails.logger.debug("matched show: #{stplink['href']}")
                               url = url_base + stplink['href']
+
                               @link = Link.new(url: url, show: show, season: season, chapter: episode)
                               collected_links << @link
                             end

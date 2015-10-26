@@ -1,4 +1,4 @@
-# Non database model approach
+# No database model approach
 # http://railscasts.com/episodes/219-active-model
 class Link
   include ActiveModel::Validations
