@@ -38,6 +38,7 @@ class ShowsController < ApplicationController
                     @season = season_control(@show, season)
                     episode = $2
 
+
                     unless Chapter.where(number: episode, season_id: season).first
                         chapter_control(@show, season, episode)
                         # Check here if we have this chapter or not
@@ -51,6 +52,7 @@ class ShowsController < ApplicationController
                                         Rails.logger.debug("matched show: #{stplink['href']}")
                                         url = url_base + stplink['href']
                                         add_torrent(url, show, season, episode)
+                                        @link = Link.new(url: url, show: show, season: season, chapter: episode)
                                     end
                                 end
                             end
