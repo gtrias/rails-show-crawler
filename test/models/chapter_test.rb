@@ -1,7 +1,8 @@
 require 'test_helper'
 
 class ChapterTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  test "should not save chapter without number" do
+    chapter = Chapter.new
+    assert_not chapter.save, "Saved the chapter without chapter number"
+  end
 end
