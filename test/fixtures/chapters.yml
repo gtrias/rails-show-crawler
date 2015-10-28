@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+dball_chapter_one:
   number: 1
-  season_id: 
+  season_id: dball_one
   quality: MyString
 
-two:
-  number: 1
-  season_id: 
+dball_chapter_two:
+  number: 2
+  season_id: dball_two
   quality: MyString

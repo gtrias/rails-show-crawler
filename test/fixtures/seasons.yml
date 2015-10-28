@@ -1,9 +1,17 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+dball_one:
   number: 1
-  show_id: 
+  show_id: dragonball
 
-two:
+dball_two:
+  number: 2
+  show_id: dragonball
+
+following_one:
   number: 1
-  show_id: 
+  show_id: thefollowing
+
+following_two:
+  number: 2
+  show_id: thefollowing

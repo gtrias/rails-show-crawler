@@ -1,11 +1,11 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  description: MyText
-  active: false
+dragonball:
+  name: Dragon Ball
+  description: Animes tv show
+  active: true
 
-two:
-  name: MyString
-  description: MyText
-  active: false
+thefollowing:
+  name: The Following
+  description: Suspense tv show
+  active: true

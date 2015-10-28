@@ -2,7 +2,7 @@ require 'test_helper'
 
 class ShowsControllerTest < ActionController::TestCase
   setup do
-    @show = shows(:one)
+    @show = shows(:dragonball)
   end
 
   test "should get index" do
