@@ -168,6 +168,7 @@ class ShowsController < ApplicationController
       return collected_links
     end
 
+    # Process collected links
     def process_links(link_collection)
       link_collection.each do |link|
         unless Chapter.where(number: link.chapter, season_id: link.season).first
@@ -177,6 +178,7 @@ class ShowsController < ApplicationController
       end
     end
 
+    # Make RPC connection to configured transmission server
     def connect_transmission
       require 'transmission'
       @rpc = Transmission::Config.set host: Settings.transmission.host, port: Settings.transmission.port, ssl: false, credentials: {username: Settings.transmission.user, password: Settings.transmission.password}
