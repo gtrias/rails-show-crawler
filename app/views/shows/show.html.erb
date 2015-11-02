@@ -19,11 +19,11 @@
       <ul>
           <% @show.seasons.each do |season| %>
               <li>
-                  <%= season.number %>
+                  Season: <%= season.number %>
                   <ul>
                       <% season.chapters.each do |chapter| %>
                         <li>
-                          <%= chapter.number %>
+                          Chapter: <%= chapter.number %>
                           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                                         chapter_path(chapter),
                                         :method => 'delete',
