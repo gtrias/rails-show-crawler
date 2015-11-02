@@ -17,6 +17,7 @@ class ShowsController < ApplicationController
   def crawl
     collected_links = mejortorrent_crawl
     process_links(collected_links)
+    redirect_to(@show)
   end
 
   # GET /shows/new

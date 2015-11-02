@@ -21,8 +21,15 @@
               <li>
                   <%= season.number %>
                   <ul>
-                      <% season.chapters do |chapter| %>
-                          <li><%= chapter.number %></li>
+                      <% season.chapters.each do |chapter| %>
+                        <li>
+                          <%= chapter.number %>
+                          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                                        chapter_path(chapter),
+                                        :method => 'delete',
+                                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                                        :class => 'btn btn-danger' %>
+                        </li>
                       <% end %>
                   </ul>
               </li>
