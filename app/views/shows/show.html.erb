@@ -35,6 +35,8 @@
               shows_path, :class => 'btn btn-default'  %>
 <%= link_to t('.edit', :default => t("helpers.links.edit")),
               edit_show_path(@show), :class => 'btn btn-default' %>
+<%= link_to t('.crawl', :default => t("helpers.links.crawl")),
+            crawl_show_path(@show), :class => 'btn btn-default' %>
 <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
               show_path(@show),
               :method => 'delete',
