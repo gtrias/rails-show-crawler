@@ -1,5 +1,6 @@
 class ShowsController < ApplicationController
   before_action :set_show, only: [:show, :edit, :update, :destroy, :crawl]
+  before_action :connect_transmission, only: [:index, :add_torrent]
 
   # GET /shows
   # GET /shows.json
@@ -102,12 +103,10 @@ class ShowsController < ApplicationController
 
     # Adds the torrent to transmission
     def add_torrent(url, show, season, episode)
-      require 'transmission'
       path_base = Settings.shows_download_folder
 
       begin
-        rpc = Transmission::Config.set host: Settings.transmission.host, port: Settings.transmission.port, ssl: false, credentials: {username: Settings.transmission.user, password: Settings.transmission.password}
-        torrent = Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: rpc
+        torrent = Transmission::Model::Torrent.add arguments: {filename: url}, fields: ['id'], connector: @rpc
         torrent.stop!
         location = path_base + "/" + @show.name + "/" + season + "/"
         torrent.set_location location , true
@@ -167,7 +166,6 @@ class ShowsController < ApplicationController
       end
 
       return collected_links
-
     end
 
     def process_links(link_collection)
@@ -177,5 +175,10 @@ class ShowsController < ApplicationController
           add_torrent(link.url, link.show, link.season, link.chapter)
         end
       end
+    end
+
+    def connect_transmission
+      require 'transmission'
+      @rpc = Transmission::Config.set host: Settings.transmission.host, port: Settings.transmission.port, ssl: false, credentials: {username: Settings.transmission.user, password: Settings.transmission.password}
     end
 end
