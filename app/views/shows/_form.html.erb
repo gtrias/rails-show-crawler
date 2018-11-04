@@ -1,6 +1,6 @@
 <%= form_for @show, :html => { :class => "form-horizontal show" } do |f| %>
 
-    <% if @show.errors.any? %>
+  <% if @show.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
         <h3 class="panel-title"><%= pluralize(@show.errors.count, "error") %> prohibited this show from being saved:</h3>
@@ -20,28 +20,24 @@
     <div class="controls">
       <%= f.text_field :name, :class => 'form-control' %>
     </div>
-    <%= error_span(@show[:name]) %>
   </div>
   <div class="control-group">
     <%= f.label :description, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :description, :class => 'form-control' %>
     </div>
-    <%= error_span(@show[:description]) %>
   </div>
   <div class="control-group">
     <%= f.label :active, :class => 'control-label' %>
     <div class="controls">
       <%= f.text_field :active, :class => 'form-control' %>
     </div>
-    <%= error_span(@show[:active]) %>
   </div>
   <div class="control-group">
     <%= f.label :quality_ids, :class => 'control-label' %>
     <div class="controls">
         <%= f.collection_select :quality_ids, Quality.order(:order), :id, :name, {}, {multiple: true} %>
     </div>
-    <%= error_span(@show[:quality_ids]) %>
   </div>
 
 
