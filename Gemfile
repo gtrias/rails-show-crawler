@@ -52,7 +52,7 @@ group :development do
 end
 
 # Bootstrap
-gem "less-rails" #Sprockets (what Rails 3.1 uses for its asset pipeline) supports LESS
+gem 'less-rails', '~> 4.0.0'
 gem "twitter-bootstrap-rails"
 
 
