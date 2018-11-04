@@ -134,6 +134,7 @@ class ShowsController < ApplicationController
     end
 
     def run_crawl
-      CrawlService.new().crawl(@show.title || '')
+
+      CrawlService.new().crawl(@show.name || '')
     end
 end

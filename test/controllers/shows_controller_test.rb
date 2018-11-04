@@ -16,6 +16,12 @@ class ShowsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
+  # Testing GET /crawl/:show-id
+  test "should get crawl" do
+    get :crawl
+    assert_response :success
+  end
+
   test "should create show" do
     assert_difference('Show.count') do
       post :create, params: {show: { active: @show.active, description: @show.description, name: @show.name }}
