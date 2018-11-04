@@ -18,30 +18,30 @@ class QualitiesControllerTest < ActionController::TestCase
 
   test "should create quality" do
     assert_difference('Quality.count') do
-      post :create, quality: { name: @quality.name, order: @quality.order }
+      post :create, params: { quality: { name: @quality.name, order: @quality.order }}
     end
 
     assert_redirected_to quality_path(assigns(:quality))
   end
 
   test "should show quality" do
-    get :show, id: @quality
+    get :show, params: { id: @quality }
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @quality
+    get :show, params: { id: @quality }
     assert_response :success
   end
 
   test "should update quality" do
-    patch :update, id: @quality, quality: { name: @quality.name, order: @quality.order }
+    patch :update, params: {id: @quality, quality: { name: @quality.name, order: @quality.order }}
     assert_redirected_to quality_path(assigns(:quality))
   end
 
   test "should destroy quality" do
     assert_difference('Quality.count', -1) do
-      delete :destroy, id: @quality
+      delete :destroy, params: { id: @quality }
     end
 
     assert_redirected_to qualities_path

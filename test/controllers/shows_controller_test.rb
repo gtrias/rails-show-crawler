@@ -18,30 +18,30 @@ class ShowsControllerTest < ActionController::TestCase
 
   test "should create show" do
     assert_difference('Show.count') do
-      post :create, show: { active: @show.active, description: @show.description, name: @show.name }
+      post :create, params: {show: { active: @show.active, description: @show.description, name: @show.name }}
     end
 
     assert_redirected_to show_path(assigns(:show))
   end
 
   test "should show show" do
-    get :show, id: @show
+    get :show, params: { id: @show }
     assert_response :success
   end
 
   test "should get edit" do
-    get :edit, id: @show
+    get :edit, params: { id: @show }
     assert_response :success
   end
 
   test "should update show" do
-    patch :update, id: @show, show: { active: @show.active, description: @show.description, name: @show.name }
+    patch :update, params: { id: @show, show: { active: @show.active, description: @show.description, name: @show.name } }
     assert_redirected_to show_path(assigns(:show))
   end
 
   test "should destroy show" do
     assert_difference('Show.count', -1) do
-      delete :destroy, id: @show
+      delete :destroy, params: { id: @show }
     end
 
     assert_redirected_to shows_path

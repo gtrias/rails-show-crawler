@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,21 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016065816) do
+ActiveRecord::Schema.define(version: 2015_10_16_065816) do
 
   create_table "chapters", force: :cascade do |t|
-    t.integer  "number"
-    t.integer  "season_id"
-    t.string   "quality"
+    t.integer "number"
+    t.integer "season_id"
+    t.string "quality"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["season_id"], name: "index_chapters_on_season_id"
   end
 
-  add_index "chapters", ["season_id"], name: "index_chapters_on_season_id"
-
   create_table "qualities", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "order"
+    t.string "name"
+    t.integer "order"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -33,26 +31,24 @@ ActiveRecord::Schema.define(version: 20151016065816) do
   create_table "qualities_shows", id: false, force: :cascade do |t|
     t.integer "show_id"
     t.integer "quality_id"
+    t.index ["quality_id"], name: "index_qualities_shows_on_quality_id"
+    t.index ["show_id"], name: "index_qualities_shows_on_show_id"
   end
-
-  add_index "qualities_shows", ["quality_id"], name: "index_qualities_shows_on_quality_id"
-  add_index "qualities_shows", ["show_id"], name: "index_qualities_shows_on_show_id"
 
   create_table "seasons", force: :cascade do |t|
-    t.integer  "number"
-    t.integer  "show_id"
+    t.integer "number"
+    t.integer "show_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["show_id"], name: "index_seasons_on_show_id"
   end
 
-  add_index "seasons", ["show_id"], name: "index_seasons_on_show_id"
-
   create_table "shows", force: :cascade do |t|
-    t.string   "name"
-    t.text     "description"
-    t.boolean  "active"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.string "name"
+    t.text "description"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
 end
