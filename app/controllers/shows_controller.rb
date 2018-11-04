@@ -16,7 +16,7 @@ class ShowsController < ApplicationController
   # GET /crawl/1
   # GET /crawl/1.json
   def crawl
-    collected_links = mejortorrent_crawl
+    collected_links = run_crawl
     process_links(collected_links)
     redirect_to(@show)
   end
@@ -117,57 +117,6 @@ class ShowsController < ApplicationController
       end
     end
 
-    def mejortorrent_crawl
-      require 'nokogiri'
-      require 'open-uri'
-      collected_links = Array.new
-
-      url_base = "http://www.mejortorrent.com"
-
-      doc = Nokogiri::HTML(open(url_base + "/secciones.php?sec=buscador&valor=" + @show.name))
-      doc.css('a').each do |link|
-          # Rails.logger.debug("Show: #{link.inspect}")
-          # Rails.logger.debug("Show text: #{link['text']}")
-
-          if /(\d)-Temporada/.match(link['href'])
-              # Rails.logger.debug("Show href: #{link['href']}")
-              torrentsdoc = Nokogiri::HTML(open(url_base + link['href']))
-              # season = $1
-              torrentsdoc.css('a').each do |tlink|
-                  # Rails.logger.debug("Show href: #{tlink['href']}")
-                  # Rails.logger.debug("Show season: #{$1}")
-                  # Show href: /serie-episodio-descargar-torrent-25036-The-Following-3x03.html
-                  if /([0-9])x([0-9]{2})/.match(tlink['href'])
-                      season = $1
-                      episode = $2
-                      @season = season_control(@show, season)
-
-
-                      # Check here if we have this chapter or not
-                      # Rails.logger.debug("matched show link: #{tlink['href']}")
-                      episodepage = Nokogiri::HTML(open(url_base + tlink['href']))
-                      episodepage.css('a').each do |stlink|
-                        if /secciones\.php\?sec=descargas&ap=contar&tabla=series/.match(stlink['href'])
-                          episodetorrentpage = Nokogiri::HTML(open(url_base + '/' + stlink['href']))
-                          episodetorrentpage.css('a').each do |stplink|
-                            if /\.torrent$/.match(stplink['href'])
-                              Rails.logger.debug("matched show: #{stplink['href']}")
-                              url = url_base + stplink['href']
-
-                              @link = Link.new(url: url, show: show, season: season, chapter: episode)
-                              collected_links << @link
-                            end
-                          end
-                        end
-                      end
-                  end
-              end
-          end
-      end
-
-      return collected_links
-    end
-
     # Process collected links
     def process_links(link_collection)
       link_collection.each do |link|
@@ -182,5 +131,9 @@ class ShowsController < ApplicationController
     def connect_transmission
       require 'transmission'
       @rpc = Transmission::Config.set host: Settings.transmission.host, port: Settings.transmission.port, ssl: false, credentials: {username: Settings.transmission.user, password: Settings.transmission.password}
+    end
+
+    def run_crawl
+      CrawlService.new().crawl(@show.title || '')
     end
 end
